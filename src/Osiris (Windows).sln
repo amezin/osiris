@@ -1,11 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{97DA5E16-D0AC-48B0-833D-64B59CAC4A70}"
-	ProjectSection(SolutionItems) = preProject
-		Acknowledgements.txt = Acknowledgements.txt
-	EndProjectSection
-EndProject
+# Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osiris", "Osiris\Osiris.csproj", "{08BAF095-34F7-49E6-849E-7C457DFCE7F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osiris.Content.Pipeline", "Osiris.Content.Pipeline\Osiris.Content.Pipeline.csproj", "{C82B172E-9F48-4C9C-B7E9-84231F74E635}"
@@ -17,8 +12,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelsDemo", "ModelsDemo\ModelsDemo\ModelsDemo.csproj", "{7B2A039F-55E0-428E-87B6-E5827E9B27EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelsDemoContent", "ModelsDemo\ModelsDemoContent\ModelsDemoContent.contentproj", "{BCB8A781-6E1D-4B09-A502-1AD384447CDC}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{E133C23B-100D-4F8F-A8B1-07641FC1035B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osiris (Xbox)", "Osiris\Osiris (Xbox).csproj", "{AD45D350-6C9B-49BB-A60C-FEF070EAF650}"
 EndProject
