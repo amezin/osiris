@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Globalization;
+using System.Threading;
 using Meshellator;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
@@ -28,87 +30,94 @@ namespace Osiris.Content.Pipeline
 		/// <returns>Resulting game asset.</returns>
 		public override NodeContent Import(string filename, ContentImporterContext context)
 		{
+            CultureInfo oldCulture = CultureInfo.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+
 			NodeContent rootNode = new NodeContent
 			{
 				Identity = new ContentIdentity(filename),
 				Name = Path.GetFileNameWithoutExtension(filename)
 			};
 
-			try
-			{
-				// Import file using Meshellator.
-				Scene scene = MeshellatorLoader.ImportFromFile(filename);
+            try
+            {
+                // Import file using Meshellator.
+                Scene scene = MeshellatorLoader.ImportFromFile(filename);
 
-				// Create materials.
-				//System.Diagnostics.Debugger.Launch();
-				Dictionary<Material, MaterialContent> materials = GetMaterials(scene);
+                // Create materials.
+                //System.Diagnostics.Debugger.Launch();
+                Dictionary<Material, MaterialContent> materials = GetMaterials(scene);
 
-				// Convert Meshellator scene to XNA mesh.
-				foreach (Mesh mesh in scene.Meshes)
-				{
-					MeshContent meshContent = new MeshContent
-					{
-						Name = mesh.Name
-					};
-					foreach (Point3D position in mesh.Positions)
-						meshContent.Positions.Add(ConvertPoint3D(position));
+                // Convert Meshellator scene to XNA mesh.
+                foreach (Mesh mesh in scene.Meshes)
+                {
+                    MeshContent meshContent = new MeshContent
+                    {
+                        Name = mesh.Name
+                    };
+                    foreach (Point3D position in mesh.Positions)
+                        meshContent.Positions.Add(ConvertPoint3D(position));
 
-					MaterialContent material = (mesh.Material != null)
-					                           	? materials[mesh.Material]
-					                           	: new BasicMaterialContent
-					                           	{
-					                           		DiffuseColor = new Vector3(0.5f),
-					                           		VertexColorEnabled = false
-					                           	};
-					GeometryContent geometryContent = new GeometryContent
-					{
-						Material = material
-					};
-					meshContent.Geometry.Add(geometryContent);
+                    MaterialContent material = (mesh.Material != null)
+                                                ? materials[mesh.Material]
+                                                : new BasicMaterialContent
+                                                {
+                                                    DiffuseColor = new Vector3(0.5f),
+                                                    VertexColorEnabled = false
+                                                };
+                    GeometryContent geometryContent = new GeometryContent
+                    {
+                        Material = material
+                    };
+                    meshContent.Geometry.Add(geometryContent);
 
-					geometryContent.Indices.AddRange(mesh.Indices);
+                    geometryContent.Indices.AddRange(mesh.Indices);
 
-					for (int i = 0; i < mesh.Positions.Count; ++i)
-						geometryContent.Vertices.Add(i);
+                    for (int i = 0; i < mesh.Positions.Count; ++i)
+                        geometryContent.Vertices.Add(i);
 
-					List<Vector2> textureCoordinates = new List<Vector2>();
-					for (int i = 0; i < mesh.Positions.Count; ++i)
-					{
-						Vector2 textureCoordinate = (i < mesh.TextureCoordinates.Count)
-							? ConvertTextureCoordinate(mesh.TextureCoordinates[i])
-							: Vector2.Zero;
-						textureCoordinates.Add(textureCoordinate);
-					}
-					geometryContent.Vertices.Channels.Add(VertexChannelNames.TextureCoordinate(0), textureCoordinates);
+                    List<Vector2> textureCoordinates = new List<Vector2>();
+                    for (int i = 0; i < mesh.Positions.Count; ++i)
+                    {
+                        Vector2 textureCoordinate = (i < mesh.TextureCoordinates.Count)
+                            ? ConvertTextureCoordinate(mesh.TextureCoordinates[i])
+                            : Vector2.Zero;
+                        textureCoordinates.Add(textureCoordinate);
+                    }
+                    geometryContent.Vertices.Channels.Add(VertexChannelNames.TextureCoordinate(0), textureCoordinates);
 
-					List<Vector3> normals = new List<Vector3>();
-					foreach (Vector3D normal in mesh.Normals)
-						normals.Add(ConvertVector3D(normal));
-					geometryContent.Vertices.Channels.Add(VertexChannelNames.Normal(), normals);
+                    List<Vector3> normals = new List<Vector3>();
+                    foreach (Vector3D normal in mesh.Normals)
+                        normals.Add(ConvertVector3D(normal));
+                    geometryContent.Vertices.Channels.Add(VertexChannelNames.Normal(), normals);
 
-					// Finish the mesh and set the transform.
-					if (SwapWindingOrder)
-						MeshHelper.SwapWindingOrder(meshContent);
-					meshContent.Transform = ConvertTransform(mesh.Transform);
+                    // Finish the mesh and set the transform.
+                    if (SwapWindingOrder)
+                        MeshHelper.SwapWindingOrder(meshContent);
+                    meshContent.Transform = ConvertTransform(mesh.Transform);
 
-					// Add the mesh to the model
-					rootNode.Children.Add(meshContent);
-				}
+                    // Add the mesh to the model
+                    rootNode.Children.Add(meshContent);
+                }
 
-				return rootNode;
-			}
-			catch (InvalidContentException)
-			{
-				// InvalidContentExceptions do not need further processing
-				throw;
-			}
-			catch (Exception e)
-			{
-				// Wrap exception with content identity (includes line number)
-				throw new InvalidContentException(
-					"Unable to parse file. Exception:\n" + e.ToString(),
-					rootNode.Identity, e);
-			}
+                return rootNode;
+            }
+            catch (InvalidContentException)
+            {
+                // InvalidContentExceptions do not need further processing
+                throw;
+            }
+            catch (Exception e)
+            {
+                // Wrap exception with content identity (includes line number)
+                throw new InvalidContentException(
+                    "Unable to parse file. Exception:\n" + e.ToString(),
+                    rootNode.Identity, e);
+            }
+            finally
+            {
+                Thread.CurrentThread.CurrentCulture = oldCulture;
+            }
 		}
 
 		private static Matrix ConvertTransform(Transform3D transform)
