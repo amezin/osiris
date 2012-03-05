@@ -6,6 +6,7 @@ namespace Osiris.Graphics
 	{
 		Matrix Projection { get; }
 		Matrix View { get; }
+        BoundingFrustum Frustum { get; }
 
 		float ProjectionNear
 		{

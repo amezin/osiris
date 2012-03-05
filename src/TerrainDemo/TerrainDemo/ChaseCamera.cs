@@ -242,6 +242,12 @@ namespace TerrainDemo
         }
         private Matrix projection;
 
+        public BoundingFrustum Frustum
+        {
+            get { return frustum; }
+        }
+        private BoundingFrustum frustum = new BoundingFrustum(Matrix.Identity);
+
         #endregion
 
 
@@ -274,6 +280,7 @@ namespace TerrainDemo
             view = Matrix.CreateLookAt(this.Position, this.LookAt, this.Up);
             projection = Matrix.CreatePerspectiveFieldOfView(FieldOfView,
                 AspectRatio, NearPlaneDistance, FarPlaneDistance);
+            frustum.Matrix = view * projection;
         }
 
         /// <summary>

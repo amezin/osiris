@@ -36,8 +36,12 @@ namespace Osiris.Graphics.Terrain
 			// TODO: Maybe don't need to update levels for invisible patches?
 			// set preferred tesselation levels for each patch
 			for (int y = 0; y < _numPatchesY; y++)
-				for (int x = 0; x < _numPatchesX; x++)
-					_patches[x, y].UpdateLevelOfDetail(camera);
+                for (int x = 0; x < _numPatchesX; x++)
+                {
+                    _patches[x, y].UpdateLevelOfDetail(camera);
+                    //Frustum culling
+                    _patches[x, y].Visible = camera.Frustum.Intersects(_patches[x, y].BoundingBox);
+                }
 
 			// now, make sure that each patch is no more than 1 level different from its neighbours
 			// we loop through all patches, and if any are changed, set a flag. continue the outer
@@ -89,16 +93,15 @@ namespace Osiris.Graphics.Terrain
 			// make proper use of the z-index
 			for (int y = 0; y < _numPatchesY; y++)
 				for (int x = 0; x < _numPatchesX; x++)
-					// TODO: Frustum culling
-					//if (_patches[x, y].Visible)
-					//{
+					if (_patches[x, y].Visible)
+					{
 						// start effect rendering
 						foreach (EffectPass pass in Effect.CurrentTechnique.Passes)
 						{
 							pass.Apply();
 							_patches[x, y].Draw();
 						}
-					//}
+					}
 		}
 	}
 }
