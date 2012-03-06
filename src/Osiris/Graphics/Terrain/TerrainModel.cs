@@ -111,12 +111,12 @@ namespace Osiris.Graphics.Terrain
         public void Draw()
 		{
             // start effect rendering
-            foreach (EffectPass pass in Effect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                foreach (Patch p in _visiblePatches)
-					p.Draw();
-			}
+            foreach (Patch p in _visiblePatches)
+                foreach (EffectPass pass in Effect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+                    p.Draw();
+			    }
 		}
 	}
 }
