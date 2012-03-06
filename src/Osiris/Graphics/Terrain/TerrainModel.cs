@@ -110,15 +110,13 @@ namespace Osiris.Graphics.Terrain
 
         public void Draw()
 		{
-			// this needs to change to render closest patches first, so that we
-			// make proper use of the z-index
-            foreach (Patch p in _visiblePatches)
-				// start effect rendering
-				foreach (EffectPass pass in Effect.CurrentTechnique.Passes)
-				{
-					pass.Apply();
+            // start effect rendering
+            foreach (EffectPass pass in Effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                foreach (Patch p in _visiblePatches)
 					p.Draw();
-				}
+			}
 		}
 	}
 }
