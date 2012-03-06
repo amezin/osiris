@@ -10,6 +10,6 @@ namespace Osiris.Terrain.Content.Pipeline.Graphics
 		public PatchContent[,] Patches { get; set; }
 		public HeightMapContent HeightMap { get; set; }
 
-		public DualTextureMaterialContent Material { get; set; }
+		public MaterialContent Material { get; set; }
 	}
 }
