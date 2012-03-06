@@ -36,11 +36,9 @@ namespace Osiris.Content
 
 			HeightMap heightMap = input.ReadObject<HeightMap>();
 
-			float tau = input.ReadSingle();
-
 			Effect effect = input.ReadObject<Effect>();
 
-			return new TerrainModel(numPatchesX, numPatchesY, patches, heightMap, tau, effect);
+			return new TerrainModel(numPatchesX, numPatchesY, patches, heightMap, effect);
 		}
 	}
 }

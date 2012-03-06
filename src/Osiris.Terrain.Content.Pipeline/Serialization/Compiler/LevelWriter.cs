@@ -18,7 +18,6 @@ namespace Osiris.Terrain.Content.Pipeline.Serialization.Compiler
 			output.Write(value.Indices.Length);
 			foreach (IndexCollection indexCollection in value.Indices)
 				output.WriteObject(indexCollection);
-			output.Write(value.MaximumDelta);
 		}
 	}
 }

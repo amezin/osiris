@@ -37,9 +37,6 @@ namespace Osiris.Terrain.Content.Pipeline.Processors
 			}
 		}
 
-		[DefaultValue(2.0f), Description("Error metric for geo-mipmapped terrain. Corresponds to the largest screen-space error that will be tolerated before switching to the next most detailed level.")]
-		public float Tau { get; set; }
-
 		[DisplayName("Vertical Scale"), DefaultValue(20.0f), Description("Amount to scale the height of the terrain by.")]
 		public float VerticalScale { get; set; }
 
@@ -64,7 +61,6 @@ namespace Osiris.Terrain.Content.Pipeline.Processors
 		public TerrainProcessor()
 		{
 			PatchSize = 129;
-			Tau = 2.0f;
 			VerticalScale = 20.0f;
 			HorizontalScale = 5;
 			LightingType = TerrainLightingType.PreBaked;
@@ -99,7 +95,7 @@ namespace Osiris.Terrain.Content.Pipeline.Processors
 				Texture2 = context.BuildAsset<TextureContent, TextureContent>(new ExternalReference<TextureContent>(texture2), null),
 			};
 
-			TerrainModelContentBuilder terrainModelContentBuilder = new TerrainModelContentBuilder(PatchSize, Tau, heightMap, material, DetailTextureTiling, HorizontalScale);
+			TerrainModelContentBuilder terrainModelContentBuilder = new TerrainModelContentBuilder(PatchSize, heightMap, material, DetailTextureTiling, HorizontalScale);
 			return terrainModelContentBuilder.Build(context);
 		}
 	}

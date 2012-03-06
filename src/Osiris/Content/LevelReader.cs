@@ -13,9 +13,7 @@ namespace Osiris.Content
 			for (int i = 0; i < indexCollectionCount; ++i)
 				indexBuffers[i] = input.ReadObject<IndexBuffer>();
 
-			float maximumDelta = input.ReadSingle();
-
-			return new Level(indexBuffers, maximumDelta);
+			return new Level(indexBuffers);
 		}
 	}
 }

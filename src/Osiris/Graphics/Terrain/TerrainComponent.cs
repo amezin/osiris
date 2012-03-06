@@ -46,7 +46,6 @@ namespace Osiris.Graphics.Terrain
 		protected override void LoadContent()
 		{
 			_terrainModel = Game.Content.Load<TerrainModel>(_terrainModelAssetName);
-			_terrainModel.Initialize(_camera, GraphicsDevice);
 
 			if (_terrainModel.Effect is BasicEffect)
 			{
@@ -60,7 +59,7 @@ namespace Osiris.Graphics.Terrain
 
 		public override void Update(GameTime gameTime)
 		{
-			_terrainModel.Update(_camera);
+			_terrainModel.Update(_camera.Position, _camera.Frustum);
 		}
 
 		public override void Draw(GameTime gameTime)
@@ -72,13 +71,6 @@ namespace Osiris.Graphics.Terrain
 				effectMatrices.View = _camera.View;
 				effectMatrices.Projection = _camera.Projection;
 			}
-
-			/*GraphicsDevice.RasterizerState = new RasterizerState
-			{
-				FillMode = FillMode.WireFrame
-			};*/
-
-
 			_terrainModel.Draw();
 		}
 

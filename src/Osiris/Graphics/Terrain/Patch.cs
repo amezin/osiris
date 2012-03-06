@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -6,7 +7,7 @@ namespace Osiris.Graphics.Terrain
 	/// <summary>
 	/// Summary description for Patch.
 	/// </summary>
-	public class Patch
+	public class Patch : IComparable<Patch>
 	{
 		#region Variables
 
@@ -16,12 +17,27 @@ namespace Osiris.Graphics.Terrain
 
 		private Patch _left, _right, _top, _bottom;
 
+        private float _distanceFromCamera;
+
 		#endregion
 
 		#region Properties
 
-		public bool Visible { get; set; }
 		public int ActiveLevel { get; set; }
+        public bool Visible { get; set; }
+
+        public int Levels
+        {
+            get { return _levels.Length; }
+        }
+
+        public Vector3 Center
+        {
+            get
+            {
+                return _center;
+            }
+        }
 
 		private bool LeftMoreDetailed
 		{
@@ -45,22 +61,22 @@ namespace Osiris.Graphics.Terrain
 
 		public int LeftActiveLevel
 		{
-			get {return (_left != null) ? _left.ActiveLevel : 1000;}
+			get {return (_left != null) ? _left.ActiveLevel : int.MaxValue;}
 		}
 
 		public int RightActiveLevel
 		{
-			get {return (_right != null) ? _right.ActiveLevel : 1000;}
+            get { return (_right != null) ? _right.ActiveLevel : int.MaxValue; }
 		}
 
 		public int TopActiveLevel
 		{
-			get {return (_top != null) ? _top.ActiveLevel : 1000;}
+            get { return (_top != null) ? _top.ActiveLevel : int.MaxValue; }
 		}
 
 		public int BottomActiveLevel
 		{
-			get {return (_bottom != null) ? _bottom.ActiveLevel : 1000;}
+            get { return (_bottom != null) ? _bottom.ActiveLevel : int.MaxValue; }
 		}
 
 		public Vector2 Offset { get; private set; }
@@ -77,6 +93,7 @@ namespace Osiris.Graphics.Terrain
 			_center = center;
 			Offset = offset;
 			BoundingBox = boundingBox;
+            Visible = true;
 		}
 
 		#endregion
@@ -91,31 +108,17 @@ namespace Osiris.Graphics.Terrain
 			_bottom = pBottom;
 		}
 
-		public void Initialize(float tau, ICameraService camera, GraphicsDevice graphicsDevice)
-		{
-			foreach (Level level in _levels)
-				level.Initialize(tau, camera, graphicsDevice);
-		}
-
-		public void UpdateLevelOfDetail(ICameraService camera)
-		{
-			// calculate distance(sq) from centre of this patch to the camera
-			Vector3 tDistance = _center - camera.Position;
-			float fDistanceSq = tDistance.LengthSquared();
-
-			// choose which level to use
-			ActiveLevel = 0;
-			for (short i = 1; i < _levels.Length; i++)
-				if (fDistanceSq > _levels[i].MinimumDSq)
-					ActiveLevel = i;
-		}
-
 		private static int GetNeighboursCode(bool bLeft, bool bRight, bool bTop, bool bBottom)
 		{
 			return ((bLeft) ? 1 : 0) | ((bRight) ? 2 : 0) | ((bTop) ? 4 : 0) | ((bBottom) ? 8 : 0);
 		}
 
-		public void UpdateTessellation()
+        public void UpdateDistanceFromCamera(Vector3 cameraPosition)
+        {
+            _distanceFromCamera = (_center - cameraPosition).LengthSquared();
+        }
+
+        public void UpdateTessellation()
 		{
 			// work out bitmask for neighbours
 			int nCode = GetNeighboursCode(LeftMoreDetailed, RightMoreDetailed, TopMoreDetailed, BottomMoreDetailed);
@@ -129,5 +132,12 @@ namespace Osiris.Graphics.Terrain
 		}
 
 		#endregion
-	}
+
+        public int CompareTo(Patch other)
+        {
+            if (ReferenceEquals(this, other)) return 0;
+            if (ReferenceEquals(other, null)) return -1;
+            return (_distanceFromCamera < other._distanceFromCamera) ? -1 : 1;
+        }
+    }
 }

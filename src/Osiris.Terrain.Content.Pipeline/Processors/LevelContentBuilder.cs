@@ -17,8 +17,6 @@ namespace Osiris.Terrain.Content.Pipeline.Processors
 		private readonly int _startY;
 		private readonly int _endY;
 
-		private float _maximumDelta;
-
 		public LevelContentBuilder(HeightMapContent heightMap, int patchSize, int numLevels, int level, int startX, int endX, int startY, int endY)
 		{
 			_heightMap = heightMap;
@@ -33,38 +31,11 @@ namespace Osiris.Terrain.Content.Pipeline.Processors
 
 		public LevelContent Build()
 		{
-			if (_level > 0) // don't need to calculate for top level, since it's "minimum d" is always 0
-			{
-				int hSkip = GetPowerOfTwo(_level);
-				int hHalfSkip = hSkip / 2;
-				for (int y = _startY; y < _endY - 1; y += hSkip)
-				{
-					for (int x = _startX; x < _endX; x += hSkip)
-					{
-						// down-left
-						if (x > _startX)
-							CalculateDelta(_heightMap[x - hHalfSkip, y + hHalfSkip], _heightMap[x, y], _heightMap[x - hSkip, y + hSkip]);
-
-						// down
-						CalculateDelta(_heightMap[x, y + hHalfSkip], _heightMap[x, y], _heightMap[x, y + hSkip]);
-
-						// down-right
-						if (x < _endX - 1)
-							CalculateDelta(_heightMap[x + hHalfSkip, y + hHalfSkip], _heightMap[x, y], _heightMap[x + hSkip, y + hSkip]);
-
-						// right
-						if (x < _endX - 1)
-							CalculateDelta(_heightMap[x + hHalfSkip, y], _heightMap[x, y], _heightMap[x + hSkip, y]);
-					}
-				}
-			}
-
 			IndexCollection[] indices = BuildIndices(_numLevels, _level);
 
 			return new LevelContent
 			{
 				Indices = indices,
-				MaximumDelta = _maximumDelta
 			};
 		}
 
@@ -496,21 +467,6 @@ namespace Osiris.Terrain.Content.Pipeline.Processors
 		}
 
 		#endregion
-
-		/// <summary>
-		/// Calculates the absolute difference between fHeightBefore,
-		/// and the average of fHeight1 and fHeight2
-		/// </summary>
-		/// <param name="fHeightBefore"></param>
-		/// <param name="fHeight1"></param>
-		/// <param name="fHeight2"></param>
-		private void CalculateDelta(float fHeightBefore, float fHeight1, float fHeight2)
-		{
-			float fHeightAfter = (fHeight1 + fHeight2) / 2.0f;
-			float fDelta = Math.Abs(fHeightBefore - fHeightAfter);
-			if (fDelta > _maximumDelta)
-				_maximumDelta = fDelta;
-		}
 
 		private static int GetPowerOfTwo(int number)
 		{

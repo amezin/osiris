@@ -11,7 +11,6 @@ namespace Osiris.Graphics.Terrain
 		#region Fields
 
 		private readonly IndexBuffer[] _indexBuffers;
-		private readonly float _maximumDelta;
 		
 		#endregion
 
@@ -19,18 +18,15 @@ namespace Osiris.Graphics.Terrain
 
 		public int NeighboursCode { get; set; }
 
-		public float MinimumDSq { get; private set; }
-
 		#endregion
 
 		#region Constructors
 
 		#region Instance constructor
 
-		internal Level(IndexBuffer[] indexBuffers, float maximumDelta)
+		internal Level(IndexBuffer[] indexBuffers)
 		{
 			_indexBuffers = indexBuffers;
-			_maximumDelta = maximumDelta;
 		}
 
 		#endregion
@@ -38,23 +34,6 @@ namespace Osiris.Graphics.Terrain
 		#endregion
 
 		#region Methods
-
-		public void Initialize(float tau, ICameraService camera, GraphicsDevice graphicsDevice)
-		{
-			RecalculateMinimumD(tau, camera, graphicsDevice);
-		}
-
-		private void RecalculateMinimumD(float tau, ICameraService camera, GraphicsDevice graphicsDevice)
-		{
-			// precalculate C
-			float fA = camera.ProjectionNear / Math.Abs(camera.ProjectionTop); // 2
-			float fT = 2 * tau / (float)graphicsDevice.Viewport.Height; // 0.01333
-			float fC = fA / fT; // 150
-
-			// we now have maximum delta
-			float fMinimumD = _maximumDelta * fC;
-			MinimumDSq = fMinimumD * fMinimumD;
-		}
 
 		public void Draw(int numVertices)
 		{

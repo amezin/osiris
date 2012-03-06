@@ -20,7 +20,6 @@ namespace Osiris.Terrain.Content.Pipeline.Serialization.Compiler
 				for (int x = 0; x < value.NumPatchesX; ++x)
 					output.WriteObject(value.Patches[x, y]);
 			output.WriteObject(value.HeightMap);
-			output.Write(value.Tau);
 			output.WriteObject(value.Material);
 		}
 	}

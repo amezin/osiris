@@ -7,16 +7,14 @@ namespace Osiris.Terrain.Content.Pipeline.Processors
 	public class TerrainModelContentBuilder
 	{
 		private readonly int _patchSize;
-		private readonly float _tau;
 		private readonly HeightMapContent _heightMap;
 		private readonly DualTextureMaterialContent _material;
 		private readonly int _detailTextureTiling;
 		private readonly int _horizontalScale;
 
-		public TerrainModelContentBuilder(int patchSize, float tau, HeightMapContent heightMap, DualTextureMaterialContent material, int detailTextureTiling, int horizontalScale)
+		public TerrainModelContentBuilder(int patchSize, HeightMapContent heightMap, DualTextureMaterialContent material, int detailTextureTiling, int horizontalScale)
 		{
 			_patchSize = patchSize;
-			_tau = tau;
 			_heightMap = heightMap;
 			_material = material;
 			_detailTextureTiling = detailTextureTiling;
@@ -54,7 +52,6 @@ namespace Osiris.Terrain.Content.Pipeline.Processors
 				NumPatchesY = numPatchesY,
 				Patches = patches,
 				HeightMap = _heightMap,
-				Tau = _tau,
 				Material = _material
 			};
 		}
