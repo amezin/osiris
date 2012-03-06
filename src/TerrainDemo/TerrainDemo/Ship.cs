@@ -87,6 +87,7 @@ namespace TerrainDemo
             get { return world; }
         }
         private Matrix world;
+        private float _radius = 0.0f;
 
         #endregion
 
@@ -224,7 +225,7 @@ namespace TerrainDemo
 
 
             // Prevent ship from flying under the ground
-            Position.Y = Math.Max(Position.Y, _terrain.Model.HeightMap[Position.X, Position.Z]);
+            Position.Y = Math.Max(Position.Y, _terrain.Model.HeightMap[Position.X, Position.Z] + _radius);
 
 
             // Reconstruct the ship's world matrix
@@ -234,5 +235,7 @@ namespace TerrainDemo
             world.Right = right;
             world.Translation = Position;
         }
+
+        public float Radius { get { return _radius; } set { _radius = value; } }
     }
 }

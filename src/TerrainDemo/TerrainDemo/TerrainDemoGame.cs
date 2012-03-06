@@ -124,6 +124,12 @@ namespace TerrainDemo
 			spriteFont = Content.Load<SpriteFont>("gameFont");
 
 			shipModel = Content.Load<Model>("Ship");
+            BoundingSphere sum = new BoundingSphere(Vector3.Zero, 0.0f);
+            foreach (ModelMesh mm in shipModel.Meshes)
+            {
+                sum = BoundingSphere.CreateMerged(mm.BoundingSphere, sum);
+            }
+            ship.Radius = sum.Radius;
 
 			base.LoadContent();
 		}
