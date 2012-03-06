@@ -37,7 +37,7 @@ namespace Osiris.Graphics.Terrain
                 }
             _visiblePatches = new List<Patch>(_patches.Count);
             MaxPatchesAtLevel = new int[_numLevels - 1];
-            MaxPatchesAtLevel[0] = 1;
+            MaxPatchesAtLevel[0] = 4;
             for (int i = 1; i < _numLevels - 1; i++)
             {
                 MaxPatchesAtLevel[i] = MaxPatchesAtLevel[i - 1] * 2;
