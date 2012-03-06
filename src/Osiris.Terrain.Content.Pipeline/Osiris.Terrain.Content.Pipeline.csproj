@@ -50,6 +50,7 @@
     <Compile Include="Graphics\LevelContent.cs" />
     <Compile Include="Graphics\PatchContent.cs" />
     <Compile Include="Graphics\TerrainModelContent.cs" />
+    <Compile Include="Graphics\TerrainVertex.cs" />
     <Compile Include="Processors\IndexBuilder.cs" />
     <Compile Include="Processors\LevelContentBuilder.cs" />
     <Compile Include="Processors\NormalMap.cs" />

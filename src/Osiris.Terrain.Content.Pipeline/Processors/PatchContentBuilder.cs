@@ -36,7 +36,7 @@ namespace Osiris.Terrain.Content.Pipeline.Processors
 			VertexBufferContent localVertexBuffer = new VertexBufferContent(numVertices);
 
 			// fill vertex buffer
-			VertexPositionNormalTexture2[] vertices = new VertexPositionNormalTexture2[numVertices];
+			TerrainVertex[] vertices = new TerrainVertex[numVertices];
 
 			int nStartX = _patchOffsetX * (_patchSize - 1);
 			int nStartY = _patchOffsetY * (_patchSize - 1);
@@ -58,7 +58,7 @@ namespace Osiris.Terrain.Content.Pipeline.Processors
 					Vector2 texCoords1 = new Vector2(x / (float) (_heightMap.Width - 1), y / (float) (_heightMap.Height - 1));
 					Vector2 texCoords2 = texCoords1 * _detailTextureTiling;
 
-					vertices[index++] = new VertexPositionNormalTexture2(
+					vertices[index++] = new TerrainVertex(
 						new Vector3(x * _horizontalScale, fZ, y * _horizontalScale),
 						new Vector3(0, 1, 0),
 						texCoords1,
@@ -66,9 +66,9 @@ namespace Osiris.Terrain.Content.Pipeline.Processors
 				}
 			}
 
-			localVertexBuffer.Write(0, VertexBufferContent.SizeOf(typeof(VertexPositionNormalTexture2)), vertices);
+			localVertexBuffer.Write(0, VertexBufferContent.SizeOf(typeof(TerrainVertex)), vertices);
 			localVertexBuffer.VertexDeclaration = new VertexDeclarationContent();
-			foreach (VertexElement vertexElement in VertexPositionNormalTexture2.VertexDeclaration.GetVertexElements())
+			foreach (VertexElement vertexElement in TerrainVertex.VertexDeclaration.GetVertexElements())
 				localVertexBuffer.VertexDeclaration.VertexElements.Add(vertexElement);
 
 			#endregion
