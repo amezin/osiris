@@ -54,12 +54,6 @@ namespace Osiris.Terrain.Content.Pipeline.Processors
 		[DisplayName("Horizontal Scale"), DefaultValue(5), Description("Amount to scale the width and length of the terrain by.")]
 		public int HorizontalScale { get; set; }
 
-		[DisplayName("Lighting Type"), DefaultValue(TerrainLightingType.PreBaked), Description("PreBaked = Lighting is baked into terrain color texture. Static = Lighting is calculated at build-time from the directional light settings for this terrain.")]
-		public TerrainLightingType LightingType { get; set; }
-
-		[DisplayName("Light Direction"), DefaultValue("1, -1, 1")]
-		public Vector3 LightDirection { get; set; }
-
 		[DisplayName("Color Texture"), Description("Set to the relative path of a colour texture.")]
 		public string ColorTexture { get; set; }
 
@@ -74,8 +68,6 @@ namespace Osiris.Terrain.Content.Pipeline.Processors
 			PatchSize = 129;
 			VerticalScale = 20.0f;
 			HorizontalScale = 5;
-			LightingType = TerrainLightingType.PreBaked;
-			LightDirection = new Vector3(1, -1, 1);
 			DetailTextureTiling = 10;
 		}
 
