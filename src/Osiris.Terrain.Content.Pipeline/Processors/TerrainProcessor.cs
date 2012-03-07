@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.IO;
 using Microsoft.Xna.Framework;
@@ -21,21 +22,31 @@ namespace Osiris.Terrain.Content.Pipeline.Processors
 
 		#endregion
 
-		/*const float terrainScale = 4;
-		const float terrainBumpiness = 64;
-		const float texCoordScale = 0.1f;
-		const string terrainTexture = "rocks.bmp";*/
-
 		[DefaultValue(129), DisplayName("Patch Size"), Description("Patch size must be 2^n + 1. For example, 129.")]
 		public int PatchSize
 		{
 			get { return _patchSize; }
 			set
 			{
-				// TODO: validate patch size.
+                validatePatchSize(value);
 				_patchSize = value;
 			}
 		}
+
+        private static void validatePatchSize(int value)
+        {
+            value -= 1;
+            int bitcount = 0;
+            while (value != 0)
+            {
+                if ((value & 1) != 0) bitcount++;
+                value >>= 1;
+            }
+            if (bitcount != 1)
+            {
+                throw new ArgumentOutOfRangeException("PatchSize", value, "Patch size must be 2^n + 1. For example, 129.");
+            }
+        }
 
 		[DisplayName("Vertical Scale"), DefaultValue(20.0f), Description("Amount to scale the height of the terrain by.")]
 		public float VerticalScale { get; set; }
