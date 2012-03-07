@@ -77,7 +77,6 @@
     <Compile Include="Graphics\Terrain\Level.cs" />
     <Compile Include="Graphics\Terrain\Patch.cs" />
     <Compile Include="Graphics\Terrain\TerrainModel.cs" />
-    <Compile Include="MathHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

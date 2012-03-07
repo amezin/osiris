@@ -1,3 +1,5 @@
+using System;
+
 namespace Osiris.Graphics.Terrain
 {
 	public class HeightMap
@@ -24,14 +26,14 @@ namespace Osiris.Graphics.Terrain
 				z /= _horizontalScale;
 
 				// get integer and fractional parts of coordinates
-				int nIntX0 = Osiris.MathHelper.FloorToInt(x);
-				int nIntY0 = Osiris.MathHelper.FloorToInt(z);
+				int nIntX0 = (int)x;
+				int nIntY0 = (int)z;
 				float fFractionalX = x - nIntX0;
 				float fFractionalY = z - nIntY0;
 
 				// get coordinates for "other" side of quad
-				int nIntX1 = Osiris.MathHelper.Clamp(nIntX0 + 1, 0, Width - 1);
-				int nIntY1 = Osiris.MathHelper.Clamp(nIntY0 + 1, 0, Height - 1);
+				int nIntX1 = Math.Min(Math.Max(nIntX0 + 1, 0), Width - 1);
+				int nIntY1 = Math.Min(Math.Max(nIntY0 + 1, 0), Height - 1);
 
 				// read 4 map values
 				float f0 = this[nIntX0, nIntY0];
