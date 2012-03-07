@@ -8,19 +8,9 @@ namespace Osiris.Graphics
 		Matrix View { get; }
         BoundingFrustum Frustum { get; }
 
-		float ProjectionNear
-		{
-			get;
-		}
-
-		float ProjectionTop
-		{
-			get;
-		}
-
-		Vector3 Position
-		{
-			get;
-		}
+        Vector3 Position
+        {
+            get;
+        }
 	}
 }
