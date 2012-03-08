@@ -87,19 +87,22 @@ namespace Osiris.Terrain.Content.Pipeline.Processors
 
 			HeightMapContent heightMap = new HeightMapContent(heightfield.Width, heightfield.Height, heights, VerticalScale, HorizontalScale);
 
-			string directory = Path.GetDirectoryName(input.Identity.SourceFilename);
-			string texture1 = Path.Combine(directory, ColorTexture);
-			string texture2 = Path.Combine(directory, DetailTexture);
-
-			// Create a material, and point it at our terrain texture.
-			DualTextureMaterialContent material = new DualTextureMaterialContent
-			{
-				Texture = context.BuildAsset<TextureContent, TextureContent>(new ExternalReference<TextureContent>(texture1), null),
-				Texture2 = context.BuildAsset<TextureContent, TextureContent>(new ExternalReference<TextureContent>(texture2), null),
-			};
-
-			TerrainModelContentBuilder terrainModelContentBuilder = new TerrainModelContentBuilder(PatchSize, heightMap, material, DetailTextureTiling, HorizontalScale);
+            TerrainModelContentBuilder terrainModelContentBuilder = new TerrainModelContentBuilder(PatchSize, heightMap, buildMaterial(input, context), DetailTextureTiling, HorizontalScale);
 			return terrainModelContentBuilder.Build(context);
 		}
+
+        protected virtual MaterialContent buildMaterial(Texture2DContent input, ContentProcessorContext context)
+        {
+            string directory = Path.GetDirectoryName(input.Identity.SourceFilename);
+            string texture1 = Path.Combine(directory, ColorTexture);
+            string texture2 = Path.Combine(directory, DetailTexture);
+
+            // Create a material, and point it at our terrain texture.
+            return new DualTextureMaterialContent
+            {
+                Texture = context.BuildAsset<TextureContent, TextureContent>(new ExternalReference<TextureContent>(texture1), null),
+                Texture2 = context.BuildAsset<TextureContent, TextureContent>(new ExternalReference<TextureContent>(texture2), null),
+            };
+        }
 	}
 }

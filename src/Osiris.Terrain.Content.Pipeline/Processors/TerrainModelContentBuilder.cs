@@ -8,11 +8,11 @@ namespace Osiris.Terrain.Content.Pipeline.Processors
 	{
 		private readonly int _patchSize;
 		private readonly HeightMapContent _heightMap;
-		private readonly DualTextureMaterialContent _material;
+		private readonly MaterialContent _material;
 		private readonly int _detailTextureTiling;
 		private readonly int _horizontalScale;
 
-		public TerrainModelContentBuilder(int patchSize, HeightMapContent heightMap, DualTextureMaterialContent material, int detailTextureTiling, int horizontalScale)
+		public TerrainModelContentBuilder(int patchSize, HeightMapContent heightMap, MaterialContent material, int detailTextureTiling, int horizontalScale)
 		{
 			_patchSize = patchSize;
 			_heightMap = heightMap;
