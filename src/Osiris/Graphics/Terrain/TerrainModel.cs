@@ -78,29 +78,24 @@ namespace Osiris.Graphics.Terrain
                 processedPatches++;
             }
 
-            bool bChanged;
+            bool changed;
             do
             {
-                bChanged = false;
-
-                foreach (Patch pPatch in _visiblePatches)
+                changed = false;
+                foreach (Patch p in _visiblePatches)
                 {
-                    int nLevel = pPatch.ActiveLevel;
-                    int nLeft = pPatch.LeftActiveLevel;
-                    int nRight = pPatch.RightActiveLevel;
-                    int nTop = pPatch.TopActiveLevel;
-                    int nBottom = pPatch.BottomActiveLevel;
-
-                    int nMinimumNeighbouringLevel = Math.Min(Math.Min(nLeft, nRight), Math.Min(nTop, nBottom));
-
-                    if (nLevel > nMinimumNeighbouringLevel + 1)
+                    int maxActiveLevel = p.ActiveLevel;
+                    if (p.TopActiveLevel != int.MaxValue) maxActiveLevel = Math.Max(maxActiveLevel, p.TopActiveLevel);
+                    if (p.BottomActiveLevel != int.MaxValue) maxActiveLevel = Math.Max(maxActiveLevel, p.BottomActiveLevel);
+                    if (p.LeftActiveLevel != int.MaxValue) maxActiveLevel = Math.Max(maxActiveLevel, p.LeftActiveLevel);
+                    if (p.RightActiveLevel != int.MaxValue) maxActiveLevel = Math.Max(maxActiveLevel, p.RightActiveLevel);
+                    if (p.ActiveLevel < maxActiveLevel - 1)
                     {
-                        pPatch.ActiveLevel = nMinimumNeighbouringLevel + 1;
-                        bChanged = true;
+                        changed = true;
+                        p.ActiveLevel = maxActiveLevel - 1;
                     }
                 }
-            }
-            while (bChanged);
+            } while (changed);
             
             foreach (Patch p in _visiblePatches)
             {

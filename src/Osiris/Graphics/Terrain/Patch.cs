@@ -41,42 +41,42 @@ namespace Osiris.Graphics.Terrain
 
 		private bool LeftMoreDetailed
 		{
-			get { return (_left != null && _left.ActiveLevel < ActiveLevel); }
+			get { return (LeftActiveLevel < ActiveLevel); }
 		}
 
 		private bool RightMoreDetailed
 		{
-			get { return (_right != null && _right.ActiveLevel < ActiveLevel); }
+			get { return (RightActiveLevel < ActiveLevel); }
 		}
 
 		private bool TopMoreDetailed
 		{
-			get { return (_top != null && _top.ActiveLevel < ActiveLevel); }
+            get { return (TopActiveLevel < ActiveLevel); }
 		}
 
 		private bool BottomMoreDetailed
 		{
-			get { return (_bottom != null && _bottom.ActiveLevel < ActiveLevel); }
+			get { return (BottomActiveLevel < ActiveLevel); }
 		}
 
 		public int LeftActiveLevel
 		{
-			get {return (_left != null) ? _left.ActiveLevel : int.MaxValue;}
+			get {return (_left != null && _left.Visible) ? _left.ActiveLevel : int.MaxValue;}
 		}
 
 		public int RightActiveLevel
 		{
-            get { return (_right != null) ? _right.ActiveLevel : int.MaxValue; }
+            get { return (_right != null && _right.Visible) ? _right.ActiveLevel : int.MaxValue; }
 		}
 
 		public int TopActiveLevel
 		{
-            get { return (_top != null) ? _top.ActiveLevel : int.MaxValue; }
+            get { return (_top != null && _top.Visible) ? _top.ActiveLevel : int.MaxValue; }
 		}
 
 		public int BottomActiveLevel
 		{
-            get { return (_bottom != null) ? _bottom.ActiveLevel : int.MaxValue; }
+            get { return (_bottom != null && _bottom.Visible) ? _bottom.ActiveLevel : int.MaxValue; }
 		}
 
 		public Vector2 Offset { get; private set; }
