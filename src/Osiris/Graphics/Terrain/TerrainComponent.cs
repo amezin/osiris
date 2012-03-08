@@ -47,13 +47,6 @@ namespace Osiris.Graphics.Terrain
 		{
 			_terrainModel = Game.Content.Load<TerrainModel>(_terrainModelAssetName);
 
-			if (_terrainModel.Effect is BasicEffect)
-			{
-				BasicEffect effect = (BasicEffect) _terrainModel.Effect;
-				effect.Texture = Game.Content.Load<Texture2D>("terrain");
-				effect.TextureEnabled = true;
-			}
-
 			base.LoadContent();
 		}
 
